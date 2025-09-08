@@ -291,14 +291,28 @@
 
             <div class="mb-10">
                 <h3 class="text-2xl font-medium mb-2">Inverse: C<sup>-1</sup></h3>
-                <p class="mb-4 text-gray-600 dark:text-gray-400">The inverse is like the "reciprocal" of a matrix. A matrix multiplied by its inverse gives the Identity matrix (C × C<sup>-1</sup> = I). The inverse only exists if the determinant is not zero.</p>
-                <div class="flex items-center justify-center space-x-4">
-                     <div id="inverse-matrix-c-display" class="flex items-center space-x-2"></div>
-                     <div class="op-symbol text-xl relative"><span class="absolute -top-4 -right-3 font-semibold">-1</span></div>
-                     <div class="op-symbol">=</div>
-                     <div id="inverse-result-display" class="flex items-center space-x-2"></div>
+                <p class="mb-4 text-gray-600 dark:text-gray-400">The inverse is like the "reciprocal" of a matrix. A matrix multiplied by its inverse gives the Identity matrix (C × C<sup>-1</sup> = I). The inverse only exists if the determinant is not zero. Here's how we calculate it for a 2x2 matrix:</p>
+                <p class="mb-6 explanation-box p-4 rounded-md text-center text-xl font-mono">C<sup>-1</sup> = (1 / det(C)) * Adjugate(C)</p>
+                
+                <div class="flex flex-col items-center">
+                    <!-- Step 1: 1 / determinant -->
+                    <div class="flex items-center justify-center space-x-4 mb-4">
+                        <div id="one-over-det-display" class="text-3xl font-mono text-center"></div>
+                        <div class="op-symbol text-3xl">×</div>
+                        <!-- Step 2: Adjugate Matrix -->
+                        <div class="flex flex-col items-center">
+                             <p class="text-sm font-semibold mb-1 text-gray-600 dark:text-gray-400">Adjugate Matrix</p>
+                            <div id="adjugate-display" class="flex items-center space-x-2"></div>
+                             <p class="text-xs mt-1 text-gray-500">(swap diagonal, negate off-diagonal)</p>
+                        </div>
+                    </div>
+
+                    <div class="op-symbol text-4xl mb-4">=</div>
+
+                    <!-- Step 3: Final Result -->
+                    <div id="inverse-result-display" class="flex items-center space-x-2"></div>
                 </div>
-                <div id="inverse-message" class="mt-4 text-center text-red-500 font-semibold"></div>
+                <div id="inverse-message" class="mt-4 text-center text-red-500 font-semibold h-6"></div>
             </div>
 
             <div>
@@ -751,21 +765,41 @@
             const matrixC = getMatrixValues('matrix-c-adv', 2, 2);
             const det = determinant(matrixC);
             document.getElementById('determinant-explanation').innerHTML = `(${matrixC[0][0]} × ${matrixC[1][1]}) - (${matrixC[0][1]} × ${matrixC[1][0]}) = <span class="font-bold text-blue-600 dark:text-blue-400">${det.toFixed(2).replace(/\.00$/,'')}</span>`;
+            
+            // Transpose
             document.getElementById('transpose-matrix-c-display').innerHTML = '';
             document.getElementById('transpose-matrix-c-display').appendChild(createMatrixDisplay(matrixC, false));
             const tResult = transpose(matrixC);
             displayResult('transpose-result-display', tResult);
-            document.getElementById('inverse-matrix-c-display').innerHTML = '';
-            document.getElementById('inverse-matrix-c-display').appendChild(createMatrixDisplay(matrixC, false));
-            const invResult = inverse(matrixC);
+            
+            // --- UPDATED INVERSE SECTION ---
             const invMessage = document.getElementById('inverse-message');
-            if(invResult) {
-                displayResult('inverse-result-display', invResult);
+            const oneOverDetContainer = document.getElementById('one-over-det-display');
+            const adjugateContainer = document.getElementById('adjugate-display');
+            const invResultContainer = document.getElementById('inverse-result-display');
+            
+            // Create and display the adjugate matrix
+            const adjugateMatrix = [
+                [matrixC[1][1], -matrixC[0][1]],
+                [-matrixC[1][0], matrixC[0][0]]
+            ];
+            adjugateContainer.innerHTML = '';
+            adjugateContainer.appendChild(createMatrixDisplay(adjugateMatrix, false));
+
+            if (det !== 0) {
+                oneOverDetContainer.innerHTML = `1 / <span class="font-bold text-blue-600 dark:text-blue-400">${det.toFixed(2).replace(/\.00$/,'')}</span>`;
+                
+                const invResult = inverse(matrixC);
+                invResultContainer.innerHTML = '';
+                invResultContainer.appendChild(createMatrixDisplay(invResult));
                 invMessage.textContent = '';
             } else {
-                document.getElementById('inverse-result-display').innerHTML = `<div class="w-40 h-40 flex items-center justify-center text-lg text-red-500 font-semibold">Not Invertible</div>`;
-                 invMessage.textContent = 'Inverse does not exist because the determinant is zero.';
+                oneOverDetContainer.innerHTML = `1 / <span class="font-bold text-red-500">0</span>`;
+                invResultContainer.innerHTML = `<div class="w-40 h-40 flex items-center justify-center text-lg text-red-500 font-semibold">Not Invertible</div>`;
+                invMessage.textContent = 'Inverse does not exist because the determinant is zero (cannot divide by zero).';
             }
+            
+            // Solver
             document.getElementById('solver-matrix-c-display').innerHTML = '';
             document.getElementById('solver-matrix-c-display').appendChild(createMatrixDisplay(matrixC, false));
             const vectorB = getVectorValues('vector-b').flat();
@@ -858,4 +892,5 @@
     </script>
 </body>
 </html>
+
 
