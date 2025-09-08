@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to Matrix Algebra for Data Assimilation</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="A comprehensive, interactive guide to matrix algebra, from basic operations to advanced concepts like determinants, inverses, and eigenvalues. Perfect for students of data assimilation, machine learning, and linear algebra.">
+    <meta name="keywords" content="matrix algebra, linear algebra, interactive tutorial, data assimilation, eigenvalues, eigenvectors, matrix multiplication, determinant, matrix inverse, Sergio Ibarra-Espinosa">
+    <meta name="author" content="Sergio Ibarra-Espinosa">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: center;
+        }
+        .matrix-input {
+            width: 4rem;
+            height: 4rem;
+            text-align: center;
+            font-size: 1.5rem;
+            border-radius: 0.375rem;
+            background-color: #e5e7eb;
+            transition: all 0.2s ease-in-out;
+        }
+        .dark .matrix-input {
+            background-color: #374151;
+            color: #f3f4f6;
+        }
+        .matrix-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #3b82f6;
+        }
+        .bracket {
+            font-size: 7rem;
+            line-height: 1;
+            color: #9ca3af;
+        }
+        .dark .bracket {
+            color: #4b5563;
+        }
+        .highlight-row {
+            background-color: #93c5fd !important;
+        }
+        .dark .highlight-row {
+            background-color: #3b82f6 !important;
+        }
+        .highlight-col {
+            background-color: #fca5a5 !important;
+        }
+        .dark .highlight-col {
+            background-color: #ef4444 !important;
+        }
+        .result-highlight {
+            background-color: #86efac !important;
+            transition: background-color 0.3s ease;
+        }
+        .dark .result-highlight {
+            background-color: #22c55e !important;
+        }
+        /* Custom styles for better visualization */
+        .op-symbol {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #6b7280;
+        }
+        .dark .op-symbol {
+            color: #9ca3af;
+        }
+        .explanation-box {
+            background-color: #f3f4f6;
+            border-left: 4px solid #3b82f6;
+        }
+        .dark .explanation-box {
+            background-color: #1f2937;
+            border-left: 4px solid #60a5fa;
+        }
+        .vector-grid {
+             display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+         .vector-bracket {
+            font-size: 7rem;
+            line-height: 0.8; 
+            color: #9ca3af;
+        }
+         .dark .vector-bracket {
+            color: #4b5563;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+
+    <div class="container mx-auto max-w-5xl p-4 sm:p-8">
+
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl sm:text-5xl font-bold text-blue-600 dark:text-blue-400">An Interactive Guide to Matrix Algebra</h1>
+            <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">Master the fundamentals of matrices, a key tool in fields like Data Assimilation.</p>
+            <p class="mt-2 text-sm italic text-gray-500 dark:text-gray-400">"I created this page to help me study and remember basics of matrices - Sergio Ibarra-Espinosa"</p>
+            <div class="mt-4">
+                <button id="theme-toggle" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg shadow">
+                    Toggle Dark Mode
+                </button>
+            </div>
+        </header>
+
+        <!-- Section: What is a Matrix? -->
+        <section id="what-is-matrix" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 mb-10">
+            <h2 class="text-3xl font-semibold mb-4 text-gray-900 dark:text-white">1. What is a Matrix?</h2>
+            <p class="mb-4">A matrix is a rectangular grid of numbers arranged in rows and columns. It's a powerful way to organize and work with data. We describe the size of a matrix by its number of rows and columns (e.g., a 2x2 matrix has 2 rows and 2 columns).</p>
+            <div class="flex items-center justify-center space-x-2">
+                <div class="bracket">[</div>
+                <div class="matrix-grid">
+                    <div class="w-16 h-16 flex items-center justify-center text-lg font-mono rounded-md bg-blue-100 dark:bg-blue-900">A<sub>11</sub></div>
+                    <div class="w-16 h-16 flex items-center justify-center text-lg font-mono rounded-md bg-blue-100 dark:bg-blue-900">A<sub>12</sub></div>
+                    <div class="w-16 h-16 flex items-center justify-center text-lg font-mono rounded-md bg-blue-100 dark:bg-blue-900">A<sub>21</sub></div>
+                    <div class="w-16 h-16 flex items-center justify-center text-lg font-mono rounded-md bg-blue-100 dark:bg-blue-900">A<sub>22</sub></div>
+                </div>
+                <div class="bracket">]</div>
+            </div>
+            <p class="mt-4 text-center text-sm text-gray-500">A<sub>ij</sub> refers to the element in the i-th row and j-th column.</p>
+        </section>
+
+        <!-- Section: Basic Operations -->
+        <section id="basic-ops" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 mb-10">
+            <h2 class="text-3xl font-semibold mb-4 text-gray-900 dark:text-white">2. Basic Operations</h2>
+            <p class="mb-6">These are performed element-wise. Change the values in Matrix A and Matrix B to see the results update instantly.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-around mb-8 space-y-4 sm:space-y-0">
+                <div class="text-center">
+                    <h3 class="text-xl font-medium mb-2">Matrix A</h3>
+                    <div class="flex items-center space-x-2">
+                        <div class="bracket">[</div>
+                        <div id="matrix-a-basic" class="matrix-grid">
+                            <input type="number" value="4" class="matrix-input">
+                            <input type="number" value="7" class="matrix-input">
+                            <input type="number" value="2" class="matrix-input">
+                            <input type="number" value="1" class="matrix-input">
+                        </div>
+                        <div class="bracket">]</div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <h3 class="text-xl font-medium mb-2">Matrix B</h3>
+                     <div class="flex items-center space-x-2">
+                        <div class="bracket">[</div>
+                        <div id="matrix-b-basic" class="matrix-grid">
+                            <input type="number" value="1" class="matrix-input">
+                            <input type="number" value="5" class="matrix-input">
+                            <input type="number" value="3" class="matrix-input">
+                            <input type="number" value="6" class="matrix-input">
+                        </div>
+                        <div class="bracket">]</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-8">
+                <h3 class="text-2xl font-medium mb-4">Addition (A + B)</h3>
+                <div class="flex items-center justify-center space-x-4">
+                    <div id="add-result-display" class="flex items-center space-x-2"></div>
+                </div>
+            </div>
+            <div class="mb-8">
+                <h3 class="text-2xl font-medium mb-4">Subtraction (A - B)</h3>
+                <div class="flex items-center justify-center space-x-4">
+                    <div id="sub-result-display" class="flex items-center space-x-2"></div>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-2xl font-medium mb-4">Scalar Multiplication (k * A)</h3>
+                <div class="flex flex-col sm:flex-row items-center justify-center space-x-4 space-y-4 sm:space-y-0">
+                     <div class="flex items-center space-x-2">
+                        <label for="scalar" class="text-2xl font-semibold">k =</label>
+                        <input id="scalar" type="number" value="3" class="w-20 h-16 text-center text-2xl rounded-md bg-gray-200 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                     </div>
+                     <div class="op-symbol">×</div>
+                     <div id="scalar-matrix-a-display" class="flex items-center space-x-2"></div>
+                     <div class="op-symbol">=</div>
+                     <div id="scalar-result-display" class="flex items-center space-x-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Matrix Multiplication -->
+        <section id="multiplication" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 mb-10">
+            <h2 class="text-3xl font-semibold mb-4 text-gray-900 dark:text-white">3. Matrix Multiplication (A × B)</h2>
+            <p class="mb-6">This is more complex. To get an element in the result matrix, you multiply a row from Matrix A by a column from Matrix B. Hover over a result cell to see how it's calculated.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-around mb-8 space-y-4 sm:space-y-0">
+                <div class="text-center">
+                    <h3 class="text-xl font-medium mb-2">Matrix A</h3>
+                    <div class="flex items-center space-x-2">
+                        <div class="bracket">[</div>
+                        <div id="matrix-a-mult" class="matrix-grid">
+                            <input type="number" value="2" class="matrix-input">
+                            <input type="number" value="3" class="matrix-input">
+                            <input type="number" value="1" class="matrix-input">
+                            <input type="number" value="4" class="matrix-input">
+                        </div>
+                        <div class="bracket">]</div>
+                    </div>
+                </div>
+                 <div class="op-symbol self-center">×</div>
+                <div class="text-center">
+                    <h3 class="text-xl font-medium mb-2">Matrix B</h3>
+                     <div class="flex items-center space-x-2">
+                        <div class="bracket">[</div>
+                        <div id="matrix-b-mult" class="matrix-grid">
+                            <input type="number" value="5" class="matrix-input">
+                            <input type="number" value="1" class="matrix-input">
+                            <input type="number" value="2" class="matrix-input">
+                            <input type="number" value="3" class="matrix-input">
+                        </div>
+                        <div class="bracket">]</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+                <div class="op-symbol text-4xl mb-4">=</div>
+                <div id="mult-result-display" class="flex items-center space-x-2"></div>
+                <div id="mult-explanation" class="explanation-box p-4 rounded-md mt-6 w-full max-w-md text-center h-24 flex items-center justify-center">
+                    <p class="text-lg font-mono">Hover over a result cell to see the calculation.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Advanced Concepts -->
+        <section id="advanced-concepts" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 mb-10">
+            <h2 class="text-3xl font-semibold mb-4 text-gray-900 dark:text-white">4. Advanced Concepts & Applications</h2>
+            <p class="mb-6">These concepts are crucial for solving systems of linear equations and are fundamental in data assimilation techniques.</p>
+
+            <div class="flex items-center justify-center mb-8">
+                <div class="text-center">
+                    <h3 class="text-xl font-medium mb-2">Matrix C</h3>
+                    <div class="flex items-center space-x-2">
+                        <div class="bracket">[</div>
+                        <div id="matrix-c-adv" class="matrix-grid">
+                            <input type="number" value="4" class="matrix-input">
+                            <input type="number" value="7" class="matrix-input">
+                            <input type="number" value="2" class="matrix-input">
+                            <input type="number" value="6" class="matrix-input">
+                        </div>
+                        <div class="bracket">]</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-10">
+                <h3 class="text-2xl font-medium mb-2">Determinant: det(C)</h3>
+                <p class="mb-4 text-gray-600 dark:text-gray-400">A single number that tells us important properties of a matrix. For a 2x2 matrix, det(C) = ad - bc.</p>
+                <div id="determinant-explanation" class="explanation-box p-4 rounded-md text-center text-2xl font-mono"></div>
+            </div>
+
+            <div class="mb-10">
+                <h3 class="text-2xl font-medium mb-2">Transpose: C<sup>T</sup></h3>
+                <p class="mb-4 text-gray-600 dark:text-gray-400">The matrix transpose flips a matrix over its diagonal. Rows become columns and columns become rows.</p>
+                <div class="flex items-center justify-center space-x-4">
+                     <div id="transpose-matrix-c-display" class="flex items-center space-x-2"></div>
+                     <div class="text-2xl font-semibold">➔</div>
+                     <div id="transpose-result-display" class="flex items-center space-x-2"></div>
+                </div>
+            </div>
+
+            <div class="mb-10">
+                <h3 class="text-2xl font-medium mb-2">The Identity Matrix: I</h3>
+                <p class="mb-4 text-gray-600 dark:text-gray-400">The identity matrix is the matrix equivalent of the number 1. Any matrix multiplied by the identity matrix is unchanged. It's a square matrix with 1s on the main diagonal and 0s everywhere else.</p>
+                 <div class="flex items-center justify-center space-x-4 text-center">
+                     <p class="text-xl font-mono">C × I = C</p>
+                    <div class="flex items-center space-x-2">
+                        <div class="bracket">[</div>
+                        <div class="matrix-grid">
+                            <div class="w-16 h-16 flex items-center justify-center text-2xl rounded-md bg-green-100 dark:bg-green-900 font-semibold">1</div>
+                            <div class="w-16 h-16 flex items-center justify-center text-2xl rounded-md bg-green-100 dark:bg-green-900 font-semibold">0</div>
+                            <div class="w-16 h-16 flex items-center justify-center text-2xl rounded-md bg-green-100 dark:bg-green-900 font-semibold">0</div>
+                            <div class="w-16 h-16 flex items-center justify-center text-2xl rounded-md bg-green-100 dark:bg-green-900 font-semibold">1</div>
+                        </div>
+                        <div class="bracket">]</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-10">
+                <h3 class="text-2xl font-medium mb-2">Inverse: C<sup>-1</sup></h3>
+                <p class="mb-4 text-gray-600 dark:text-gray-400">The inverse is like the "reciprocal" of a matrix. A matrix multiplied by its inverse gives the Identity matrix (C × C<sup>-1</sup> = I). The inverse only exists if the determinant is not zero.</p>
+                <div class="flex items-center justify-center space-x-4">
+                     <div id="inverse-matrix-c-display" class="flex items-center space-x-2"></div>
+                     <div class="op-symbol text-xl relative"><span class="absolute -top-4 -right-3 font-semibold">-1</span></div>
+                     <div class="op-symbol">=</div>
+                     <div id="inverse-result-display" class="flex items-center space-x-2"></div>
+                </div>
+                <div id="inverse-message" class="mt-4 text-center text-red-500 font-semibold"></div>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-medium mb-2">Application: Solving Linear Equations (Cx = b)</h3>
+                <p class="mb-4 text-gray-600 dark:text-gray-400">We can use the inverse to solve systems of linear equations. If Cx = b, then x = C<sup>-1</sup>b. Change the values in vector 'b' below.</p>
+                <div class="flex flex-col sm:flex-row items-center justify-center space-x-4 space-y-4 sm:space-y-0">
+                    <div id="solver-matrix-c-display" class="flex items-center space-x-2"></div>
+                    <div class="op-symbol">x</div>
+                    <div class="text-center">
+                        <h3 class="text-xl font-medium mb-2 invisible">Vector x</h3>
+                        <div class="flex items-center space-x-2">
+                             <div class="bracket">[</div>
+                             <div class="flex flex-col space-y-2">
+                                 <div class="w-16 h-16 flex items-center justify-center text-2xl rounded-md bg-gray-200 dark:bg-gray-700">x₁</div>
+                                 <div class="w-16 h-16 flex items-center justify-center text-2xl rounded-md bg-gray-200 dark:bg-gray-700">x₂</div>
+                             </div>
+                             <div class="bracket">]</div>
+                        </div>
+                    </div>
+                     <div class="op-symbol">=</div>
+                    <div class="text-center">
+                        <h3 class="text-xl font-medium mb-2">Vector b</h3>
+                        <div class="flex items-center space-x-2">
+                            <div class="vector-bracket">[</div>
+                            <div id="vector-b" class="vector-grid">
+                                <input type="number" value="10" class="matrix-input h-16">
+                                <input type="number" value="8" class="matrix-input h-16">
+                            </div>
+                            <div class="vector-bracket">]</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center justify-center mt-4">
+                    <div class="text-2xl font-semibold mb-4">➔</div>
+                    <div id="solver-result-display"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Eigenvalues and Eigenvectors -->
+        <section id="eigen" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 mb-10">
+            <h2 class="text-3xl font-semibold mb-4 text-gray-900 dark:text-white">5. Eigenvalues & Eigenvectors</h2>
+            <p class="mb-4 text-gray-600 dark:text-gray-400">For a given matrix A, an <span class="font-semibold text-blue-600 dark:text-blue-400">eigenvector</span> is a non-zero vector that, when multiplied by A, is simply scaled by a constant factor, the <span class="font-semibold text-blue-600 dark:text-blue-400">eigenvalue (λ)</span>. They reveal the fundamental directions of stretching or compression of the transformation represented by the matrix.</p>
+            <p class="mb-6 explanation-box p-4 rounded-md text-center text-xl font-mono">Av = λv</p>
+
+            <div class="flex items-center justify-center mb-8">
+                <div class="text-center">
+                    <h3 class="text-xl font-medium mb-2">Matrix A</h3>
+                    <div class="flex items-center space-x-2">
+                        <div class="bracket">[</div>
+                        <div id="matrix-a-eigen" class="matrix-grid">
+                            <input type="number" value="2" class="matrix-input">
+                            <input type="number" value="3" class="matrix-input">
+                            <input type="number" value="2" class="matrix-input">
+                            <input type="number" value="1" class="matrix-input">
+                        </div>
+                        <div class="bracket">]</div>
+                    </div>
+                </div>
+            </div>
+            <div id="eigen-results-display" class="mt-6 text-center"></div>
+        </section>
+
+        <!-- Section: Connection to Data Assimilation -->
+        <section id="data-assimilation" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 mb-10">
+             <h2 class="text-3xl font-semibold mb-4 text-gray-900 dark:text-white">6. Connection to Data Assimilation</h2>
+             <p class="mb-4">In data assimilation, we combine model forecasts with real-world observations to get the best possible estimate of the state of a system (like the atmosphere). Matrices are the language we use to do this:</p>
+             <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-400">
+                <li><strong>State Vector (x):</strong> A column matrix representing the state of the system (e.g., temperature, pressure at different points).</li>
+                <li><strong>Observation Vector (y):</strong> A column matrix of the actual measurements.</li>
+                <li><strong>Covariance Matrices (B, R):</strong> These square matrices (like the ones you've played with) describe the errors and uncertainties in our model and observations. The <span class="font-semibold text-blue-600 dark:text-blue-400">transpose</span>, <span class="font-semibold text-blue-600 dark:text-blue-400">inverse</span>, and <span class="font-semibold text-blue-600 dark:text-blue-400">multiplication</span> operations are used constantly to find the optimal analysis state.</li>
+                <li><strong>Eigenvalues of Covariance Matrices:</strong> The eigenvectors of error covariance matrices represent the dominant patterns of uncertainty (modes of variability), and the eigenvalues represent their variance. This is key for advanced techniques like Principal Component Analysis (PCA) to reduce the dimensionality of the problem.</li>
+             </ul>
+             <p class="mt-4 explanation-box p-4 rounded-md">Understanding these matrix operations is the first major step to understanding how data assimilation algorithms work under the hood.</p>
+        </section>
+
+        <!-- Section: 1D Kalman Filter Example -->
+        <section id="kalman-filter-1d" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8 mb-10">
+            <h2 class="text-3xl font-semibold mb-4 text-gray-900 dark:text-white">7. A Simple 1D Kalman Filter Example</h2>
+            <p class="mb-4 text-gray-600 dark:text-gray-400">Let's start with a simple 1D Kalman filter. The goal is to find the best estimate of a state (like room temperature) by combining a prediction with an observation, taking into account their respective uncertainties.</p>
+            <p class="mb-6 explanation-box p-4 rounded-md text-center text-lg sm:text-xl font-mono">ŝ = s<sub>p</sub> + K * (z - s<sub>p</sub>)</p>
+            <p class="mb-6 text-gray-600 dark:text-gray-400">The Kalman Gain `K` is a scalar value here: `K = Q / (Q + R)`. It optimally weights the prediction and observation based on their error variances.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <!-- Inputs -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold">Inputs: Tracking Room Temperature (°C)</h3>
+                    <div class="flex items-center space-x-4">
+                        <label for="kf-sp-1d" class="w-48">Model Prediction (s<sub>p</sub>):</label>
+                        <input id="kf-sp-1d" type="number" value="20" class="matrix-input w-24 h-14">
+                    </div>
+                    <div class="flex items-center space-x-4">
+                         <label for="kf-z-1d" class="w-48">Thermometer Reading (z):</label>
+                        <input id="kf-z-1d" type="number" value="23" class="matrix-input w-24 h-14">
+                    </div>
+                     <div class="flex items-center space-x-4">
+                        <label for="kf-q-1d" class="w-48">Model Error Variance (Q):</label>
+                        <input id="kf-q-1d" type="number" value="1.5" step="0.1" class="matrix-input w-24 h-14">
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <label for="kf-r-1d" class="w-48">Observation Error Variance (R):</label>
+                        <input id="kf-r-1d" type="number" value="4" step="0.1" class="matrix-input w-24 h-14">
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold">Results:</h3>
+                    <div id="kf-gain-display-1d" class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg"></div>
+                    <div id="kf-state-display-1d" class="p-4 bg-blue-100 dark:bg-blue-900 rounded-lg"></div>
+                    <div id="kf-explanation-1d" class="explanation-box p-4 rounded-md"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: 2D Kalman Filter Example -->
+        <section id="kalman-filter-2d" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8">
+            <h2 class="text-3xl font-semibold mb-4 text-gray-900 dark:text-white">8. Putting It All Together: A 2D Kalman Filter</h2>
+            <p class="mb-4 text-gray-600 dark:text-gray-400">Now, let's apply our matrix operations to a 2D problem: tracking an object's position and velocity. We will use a sensor that only measures position to correct our model's prediction for both position and velocity.</p>
+            <p class="mb-6 explanation-box p-4 rounded-md text-center text-lg sm:text-xl font-mono">ŝ = s<sub>p</sub> + K * (z - H * s<sub>p</sub>)</p>
+            <p class="mb-6 text-gray-600 dark:text-gray-400">The Kalman Gain `K` is now calculated using full matrix operations: `K = Q Hᵀ (H Q Hᵀ + R)⁻¹`.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                <!-- Column 1: Model State -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-center">Model Prediction</h3>
+                    <div class="text-center">
+                        <label>Prediction Vector (s<sub>p</sub>)<br>[pos, vel]ᵀ</label>
+                        <div class="flex items-center justify-center space-x-2 mt-2">
+                            <div class="vector-bracket">[</div>
+                            <div id="kf-sp-vec" class="vector-grid">
+                                <input type="number" value="10" class="matrix-input h-16">
+                                <input type="number" value="2" class="matrix-input h-16">
+                            </div>
+                            <div class="vector-bracket">]</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <label>Model Covariance (Q)</label>
+                        <div class="flex items-center justify-center space-x-2 mt-2">
+                            <div class="bracket">[</div>
+                            <div id="kf-q-mat" class="matrix-grid">
+                                <input type="number" value="2" step="0.1" class="matrix-input">
+                                <input type="number" value="1" step="0.1" class="matrix-input">
+                                <input type="number" value="1" step="0.1" class="matrix-input">
+                                <input type="number" value="3" step="0.1" class="matrix-input">
+                            </div>
+                            <div class="bracket">]</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 2: Observation -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-center">Observation</h3>
+                     <div class="text-center">
+                        <label>Observation (z)<br>[pos]</label>
+                        <div class="flex items-center justify-center space-x-2 mt-2">
+                            <div class="vector-bracket">[</div>
+                            <div id="kf-z-vec" class="vector-grid">
+                                <input type="number" value="14" class="matrix-input h-16">
+                            </div>
+                            <div class="vector-bracket">]</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <label>Observation Error (R)</label>
+                        <div class="flex items-center justify-center space-x-2 mt-2">
+                            <div class="bracket">[</div>
+                            <div id="kf-r-mat" class="grid grid-cols-1 gap-2">
+                                <input type="number" value="4" step="0.1" class="matrix-input">
+                            </div>
+                            <div class="bracket">]</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <label>Observation Matrix (H)</label>
+                        <p class="font-mono text-lg">[1 0]</p>
+                        <p class="text-sm text-gray-500">(maps state to observation)</p>
+                    </div>
+                </div>
+
+                <!-- Column 3: Results -->
+                <div class="space-y-4">
+                    <h3 class="text-xl font-semibold text-center">Results</h3>
+                    <div class="text-center">
+                         <label>Kalman Gain (K)</label>
+                         <div id="kf-gain-display-2d" class="flex justify-center mt-2"></div>
+                    </div>
+                     <div class="text-center">
+                         <label class="font-bold">Best Estimate (ŝ)</label>
+                         <div id="kf-state-display-2d" class="flex justify-center mt-2"></div>
+                    </div>
+                    <div id="kf-explanation-2d" class="explanation-box p-4 rounded-md"></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // --- UTILITY FUNCTIONS ---
+        const getMatrixValues = (containerId, rows, cols) => {
+            const inputs = document.querySelectorAll(`#${containerId} input`);
+            const values = Array.from(inputs).map(input => parseFloat(input.value) || 0);
+            const matrix = [];
+            for (let i = 0; i < rows; i++) {
+                matrix.push(values.slice(i * cols, (i + 1) * cols));
+            }
+            return matrix;
+        };
+        const getVectorValues = (containerId) => {
+             const inputs = document.querySelectorAll(`#${containerId} input`);
+             const values = Array.from(inputs).map(input => parseFloat(input.value) || 0);
+             return values.map(v => [v]); // Return as a column vector (matrix with 1 col)
+        }
+
+        const createMatrixDisplay = (matrix, isResult = true, idPrefix = '') => {
+            const rows = matrix.length;
+            const cols = matrix[0].length;
+            const container = document.createElement('div');
+            container.className = 'flex items-center space-x-2';
+            const bracketLeft = document.createElement('div');
+            bracketLeft.className = 'bracket';
+            bracketLeft.style.fontSize = `${rows * 3.5}rem`;
+            bracketLeft.textContent = '[';
+            const grid = document.createElement('div');
+            grid.className = 'grid gap-2';
+            grid.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+            
+            matrix.flat().forEach((val, i) => {
+                const cell = document.createElement('div');
+                cell.className = `w-16 h-16 flex items-center justify-center text-2xl rounded-md ${isResult ? 'bg-blue-100 dark:bg-blue-900 font-semibold' : 'bg-gray-200 dark:bg-gray-700'}`;
+                const valStr = isNaN(val) ? "N/A" : val.toFixed(2).replace(/\.00$/, '');
+                cell.textContent = valStr;
+                if (idPrefix) {
+                    cell.id = `${idPrefix}-${Math.floor(i/cols)}-${i%cols}`;
+                }
+                grid.appendChild(cell);
+            });
+            const bracketRight = document.createElement('div');
+            bracketRight.className = 'bracket';
+            bracketRight.style.fontSize = `${rows * 3.5}rem`;
+            bracketRight.textContent = ']';
+            container.append(bracketLeft, grid, bracketRight);
+            return container;
+        };
+        const createVectorDisplay = (vector, label = '') => createMatrixDisplay(vector, true);
+        
+        const displayResult = (containerId, resultMatrix) => {
+             const container = document.getElementById(containerId);
+             container.innerHTML = '';
+             container.appendChild(createMatrixDisplay(resultMatrix));
+        };
+
+        // --- GENERIC MATRIX MATH ---
+        const matrixMultiply = (A, B) => {
+            const A_rows = A.length, A_cols = A[0].length, B_rows = B.length, B_cols = B[0].length;
+            if (A_cols !== B_rows) return null;
+            const C = Array(A_rows).fill(0).map(() => Array(B_cols).fill(0));
+            for (let i = 0; i < A_rows; i++) {
+                for (let j = 0; j < B_cols; j++) {
+                    for (let k = 0; k < A_cols; k++) C[i][j] += A[i][k] * B[k][j];
+                }
+            }
+            return C;
+        };
+
+        const matrixAdd = (A, B) => {
+            const A_rows = A.length, A_cols = A[0].length;
+            const C = Array(A_rows).fill(0).map(() => Array(A_cols).fill(0));
+            for(let i=0; i<A_rows; i++) for(let j=0; j<A_cols; j++) C[i][j] = A[i][j] + B[i][j];
+            return C;
+        };
+
+        const matrixSubtract = (A, B) => {
+            const A_rows = A.length, A_cols = A[0].length;
+            const C = Array(A_rows).fill(0).map(() => Array(A_cols).fill(0));
+            for(let i=0; i<A_rows; i++) for(let j=0; j<A_cols; j++) C[i][j] = A[i][j] - B[i][j];
+            return C;
+        };
+
+        const genericTranspose = (A) => {
+            const A_rows = A.length, A_cols = A[0].length;
+            const C = Array(A_cols).fill(0).map(() => Array(A_rows).fill(0));
+            for(let i=0; i<A_rows; i++) for(let j=0; j<A_cols; j++) C[j][i] = A[i][j];
+            return C;
+        };
+
+        const genericInverse = (A) => {
+            const rows = A.length;
+            if (rows !== A[0].length) return null; // Not square
+            if (rows === 1) return (A[0][0] === 0) ? null : [[1 / A[0][0]]];
+            if (rows === 2) {
+                const det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
+                if (det === 0) return null;
+                const invDet = 1 / det;
+                return [
+                    [A[1][1] * invDet, -A[0][1] * invDet],
+                    [-A[1][0] * invDet, A[0][0] * invDet]
+                ];
+            }
+            return null; // Only handle 1x1 and 2x2 for this demo
+        };
+
+        // --- CALCULATION FUNCTIONS ---
+        const add = (A, B) => matrixAdd(A,B);
+        const subtract = (A, B) => matrixSubtract(A,B);
+        const scalarMultiply = (A, k) => {
+            return A.map(row => row.map(val => val * k));
+        };
+        const multiply = (A, B) => matrixMultiply(A,B);
+        const determinant = (A) => A[0][0] * A[1][1] - A[0][1] * A[1][0];
+        const transpose = (A) => genericTranspose(A);
+        const inverse = (A) => genericInverse(A);
+        
+        const solveLinearSystem = (A, b) => {
+            const A_inv = inverse(A);
+            if (!A_inv) return null;
+            const b_vec = b.map(v => [v]);
+            const x_vec = matrixMultiply(A_inv, b_vec);
+            return x_vec.flat();
+        };
+        const calculateEigen = (A) => {
+            const [a, b] = [A[0][0], A[0][1]];
+            const [c, d] = [A[1][0], A[1][1]];
+            const trace = a + d;
+            const det = a * d - b * c;
+            const discriminant = trace * trace - 4 * det;
+            if (discriminant < 0) return { error: "Complex eigenvalues (not shown)" };
+            const lambda1 = (trace + Math.sqrt(discriminant)) / 2;
+            const lambda2 = (trace - Math.sqrt(discriminant)) / 2;
+            let v1 = [0, 0], v2 = [0, 0];
+            if (c !== 0) { v1 = [lambda1 - d, c]; } else if (b !== 0) { v1 = [b, lambda1 - a]; } else { v1 = [1, 0]; }
+            if (c !== 0) { v2 = [lambda2 - d, c]; } else if (b !== 0) { v2 = [b, lambda2 - a]; } else { v2 = [0, 1]; }
+            const norm1 = Math.sqrt(v1[0] * v1[0] + v1[1] * v1[1]);
+            if (norm1 !== 0) { v1 = [v1[0] / norm1, v1[1] / norm1]; }
+            const norm2 = Math.sqrt(v2[0] * v2[0] + v2[1] * v2[1]);
+            if (norm2 !== 0) { v2 = [v2[0] / norm2, v2[1] / norm2]; }
+            return { lambda1, v1, lambda2, v2 };
+        };
+
+        const updateKalmanFilter1D = () => {
+            const sp = parseFloat(document.getElementById('kf-sp-1d').value) || 0;
+            const z = parseFloat(document.getElementById('kf-z-1d').value) || 0;
+            const Q = parseFloat(document.getElementById('kf-q-1d').value) || 0;
+            const R = parseFloat(document.getElementById('kf-r-1d').value) || 0;
+            
+            let K = 0;
+            if ((Q + R) !== 0) { K = Q / (Q + R); }
+            
+            const s_hat = sp + K * (z - sp);
+
+            const gainContainer = document.getElementById('kf-gain-display-1d');
+            gainContainer.innerHTML = `<h4 class="font-semibold mb-2">Kalman Gain (K)</h4><p class="text-3xl font-mono text-green-600 dark:text-green-400">${K.toFixed(3)}</p>`;
+            
+            const stateContainer = document.getElementById('kf-state-display-1d');
+            stateContainer.innerHTML = `<h4 class="font-semibold mb-2">Best Estimate (ŝ)</h4><p class="text-3xl font-mono text-blue-700 dark:text-blue-300">${s_hat.toFixed(3)} °C</p>`;
+
+            const explanationContainer = document.getElementById('kf-explanation-1d');
+            let explanationText = '';
+            if (K > 0.8) {
+                explanationText = 'The gain is high, meaning we trust the observation much more than the model. The result is very close to the thermometer reading.';
+            } else if (K < 0.2) {
+                 explanationText = 'The gain is low, meaning we trust the model prediction much more. The result is very close to the model prediction.';
+            } else {
+                 explanationText = 'The final estimate is a weighted average. Try making the Observation Error (R) smaller than the Model Error (Q) to trust the thermometer more, and vice-versa.';
+            }
+            explanationContainer.innerHTML = `<p>${explanationText}</p>`;
+        };
+
+        const updateKalmanFilter2D = () => {
+            const sp = getVectorValues('kf-sp-vec');
+            const z = getVectorValues('kf-z-vec');
+            const Q = getMatrixValues('kf-q-mat', 2, 2);
+            const R = getMatrixValues('kf-r-mat', 1, 1);
+            const H = [[1, 0]];
+
+            const H_T = genericTranspose(H);
+            const Q_HT = matrixMultiply(Q, H_T);
+            const H_Q_HT = matrixMultiply(H, Q_HT);
+            const InnovationCov = matrixAdd(H_Q_HT, R);
+            const InnovationCov_Inv = genericInverse(InnovationCov);
+
+            if (!InnovationCov_Inv) {
+                document.getElementById('kf-state-display-2d').innerHTML = `<p class="text-red-500 font-semibold">Error: Cannot compute inverse.</p>`;
+                return;
+            }
+
+            const K = matrixMultiply(Q_HT, InnovationCov_Inv);
+            const H_sp = matrixMultiply(H, sp);
+            const innovation = matrixSubtract(z, H_sp);
+            const correction = matrixMultiply(K, innovation);
+            const s_hat = matrixAdd(sp, correction);
+
+            const gainContainer = document.getElementById('kf-gain-display-2d');
+            gainContainer.innerHTML = '';
+            gainContainer.appendChild(createMatrixDisplay(K));
+
+            const stateContainer = document.getElementById('kf-state-display-2d');
+            stateContainer.innerHTML = '';
+            stateContainer.appendChild(createMatrixDisplay(s_hat));
+
+            const explanationContainer = document.getElementById('kf-explanation-2d');
+            let explanationText = `The filter corrected the predicted position of ${sp[0][0].toFixed(1)} to ${s_hat[0][0].toFixed(1)} and the velocity from ${sp[1][0].toFixed(1)} to ${s_hat[1][0].toFixed(1)}, using only a position measurement!`;
+             if (K[0][0] > 0.5) {
+                explanationText += ' The high first gain value shows strong confidence in the position observation.';
+            } else {
+                explanationText += ' The low first gain value shows it relied more on the model for position.';
+            }
+            explanationContainer.innerHTML = `<p>${explanationText}</p>`;
+        };
+
+        // --- UPDATE HANDLERS ---
+        const updateBasicOps = () => { 
+            const matrixA = getMatrixValues('matrix-a-basic', 2, 2);
+            const matrixB = getMatrixValues('matrix-b-basic', 2, 2);
+            const scalarVal = parseFloat(document.getElementById('scalar').value) || 0;
+            const addResult = add(matrixA, matrixB);
+            document.getElementById('add-result-display').innerHTML = '';
+            document.getElementById('add-result-display').append(createMatrixDisplay(matrixA, false), el('div', {class: 'op-symbol mx-4'}, '+'), createMatrixDisplay(matrixB, false), el('div', {class: 'op-symbol mx-4'}, '='), createMatrixDisplay(addResult));
+            const subResult = subtract(matrixA, matrixB);
+            document.getElementById('sub-result-display').innerHTML = '';
+            document.getElementById('sub-result-display').append(createMatrixDisplay(matrixA, false), el('div', {class: 'op-symbol mx-4'}, '−'), createMatrixDisplay(matrixB, false), el('div', {class: 'op-symbol mx-4'}, '='), createMatrixDisplay(subResult));
+            document.getElementById('scalar-matrix-a-display').innerHTML = '';
+            document.getElementById('scalar-matrix-a-display').appendChild(createMatrixDisplay(matrixA, false));
+            const scalarResult = scalarMultiply(matrixA, scalarVal);
+            document.getElementById('scalar-result-display').innerHTML = '';
+            document.getElementById('scalar-result-display').appendChild(createMatrixDisplay(scalarResult));
+        };
+
+        const updateMultiplication = () => { 
+             const matrixA = getMatrixValues('matrix-a-mult', 2, 2);
+            const matrixB = getMatrixValues('matrix-b-mult', 2, 2);
+            const result = multiply(matrixA, matrixB);
+            const resultContainer = document.getElementById('mult-result-display');
+            resultContainer.innerHTML = '';
+            resultContainer.appendChild(createMatrixDisplay(result, true, 'mult-res'));
+            for (let i = 0; i < 2; i++) {
+                for (let j = 0; j < 2; j++) {
+                    const cell = document.getElementById(`mult-res-${i}-${j}`);
+                    if (cell) {
+                        cell.addEventListener('mouseover', () => showMultExplanation(i, j));
+                        cell.addEventListener('mouseout', clearHighlights);
+                    }
+                }
+            }
+        };
+
+        const updateAdvancedOps = () => {
+            const matrixC = getMatrixValues('matrix-c-adv', 2, 2);
+            const det = determinant(matrixC);
+            document.getElementById('determinant-explanation').innerHTML = `(${matrixC[0][0]} × ${matrixC[1][1]}) - (${matrixC[0][1]} × ${matrixC[1][0]}) = <span class="font-bold text-blue-600 dark:text-blue-400">${det.toFixed(2).replace(/\.00$/,'')}</span>`;
+            document.getElementById('transpose-matrix-c-display').innerHTML = '';
+            document.getElementById('transpose-matrix-c-display').appendChild(createMatrixDisplay(matrixC, false));
+            const tResult = transpose(matrixC);
+            displayResult('transpose-result-display', tResult);
+            document.getElementById('inverse-matrix-c-display').innerHTML = '';
+            document.getElementById('inverse-matrix-c-display').appendChild(createMatrixDisplay(matrixC, false));
+            const invResult = inverse(matrixC);
+            const invMessage = document.getElementById('inverse-message');
+            if(invResult) {
+                displayResult('inverse-result-display', invResult);
+                invMessage.textContent = '';
+            } else {
+                document.getElementById('inverse-result-display').innerHTML = `<div class="w-40 h-40 flex items-center justify-center text-lg text-red-500 font-semibold">Not Invertible</div>`;
+                 invMessage.textContent = 'Inverse does not exist because the determinant is zero.';
+            }
+            document.getElementById('solver-matrix-c-display').innerHTML = '';
+            document.getElementById('solver-matrix-c-display').appendChild(createMatrixDisplay(matrixC, false));
+            const vectorB = getVectorValues('vector-b').flat();
+            const solverResult = solveLinearSystem(matrixC, vectorB);
+            const solverContainer = document.getElementById('solver-result-display');
+            solverContainer.innerHTML = '';
+            if (solverResult) {
+                const resultVec = solverResult.map(v => [v]);
+                solverContainer.appendChild(createMatrixDisplay(resultVec));
+            } else {
+                solverContainer.innerHTML = `<div class="text-red-500 font-semibold">System cannot be solved because matrix is not invertible.</div>`;
+            }
+        };
+
+        const updateEigen = () => {
+            const matrixA = getMatrixValues('matrix-a-eigen', 2, 2);
+            const eigenResult = calculateEigen(matrixA);
+            const container = document.getElementById('eigen-results-display');
+            container.innerHTML = '';
+            if (eigenResult.error) {
+                container.innerHTML = `<p class="text-red-500 font-semibold">${eigenResult.error}</p>`;
+                return;
+            }
+            const resultContainer = document.createElement('div');
+            resultContainer.className = 'flex flex-col sm:flex-row items-center justify-center gap-8';
+            const eigen1Container = document.createElement('div');
+            eigen1Container.className = 'flex flex-col items-center gap-2';
+            const lambda1Display = el('div', {className: 'text-xl'}, `λ₁ = <span class="font-bold text-blue-600 dark:text-blue-400">${eigenResult.lambda1.toFixed(3)}</span>`);
+            const v1Display = createMatrixDisplay(eigenResult.v1.map(v => [v]));
+            eigen1Container.append(lambda1Display, v1Display);
+            const eigen2Container = document.createElement('div');
+            eigen2Container.className = 'flex flex-col items-center gap-2';
+            const lambda2Display = el('div', {className: 'text-xl'}, `λ₂ = <span class="font-bold text-blue-600 dark:text-blue-400">${eigenResult.lambda2.toFixed(3)}</span>`);
+            const v2Display = createMatrixDisplay(eigenResult.v2.map(v => [v]));
+            eigen2Container.append(lambda2Display, v2Display);
+            resultContainer.append(eigen1Container, eigen2Container);
+            container.appendChild(resultContainer);
+        };
+
+        const showMultExplanation = (row, col) => { 
+            clearHighlights();
+            const matrixA_inputs = document.querySelectorAll('#matrix-a-mult input');
+            const matrixB_inputs = document.querySelectorAll('#matrix-b-mult input');
+            const matrixA = getMatrixValues('matrix-a-mult', 2, 2);
+            const matrixB = getMatrixValues('matrix-b-mult', 2, 2);
+            matrixA_inputs[row * 2].classList.add('highlight-row');
+            matrixA_inputs[row * 2 + 1].classList.add('highlight-row');
+            matrixB_inputs[col].classList.add('highlight-col');
+            matrixB_inputs[col + 2].classList.add('highlight-col');
+            document.getElementById(`mult-res-${row}-${col}`).classList.add('result-highlight');
+            const explanationBox = document.getElementById('mult-explanation');
+            explanationBox.innerHTML = `<p class="text-lg font-mono">(${matrixA[row][0]} × ${matrixB[0][col]}) + (${matrixA[row][1]} × ${matrixB[1][col]})</p>`;
+        };
+        const clearHighlights = () => {  
+            document.querySelectorAll('#matrix-a-mult input, #matrix-b-mult input, #mult-result-display div div').forEach(el => {
+                el.classList.remove('highlight-row', 'highlight-col', 'result-highlight');
+            });
+            const explanationBox = document.getElementById('mult-explanation');
+            if (explanationBox) {
+                explanationBox.innerHTML = `<p class="text-lg font-mono">Hover over a result cell to see the calculation.</p>`;
+            }
+        };
+
+        const el = (tag, attrs, ...children) => {
+            const element = document.createElement(tag);
+            for(const key in attrs) element.setAttribute(key, attrs[key]);
+            element.innerHTML = children.join('');
+            return element;
+        }
+
+        const runAllCalculations = () => {
+            updateBasicOps();
+            updateMultiplication();
+            updateAdvancedOps();
+            updateEigen();
+            updateKalmanFilter1D();
+            updateKalmanFilter2D();
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            runAllCalculations();
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.addEventListener('input', runAllCalculations);
+            });
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+            });
+        });
+    </script>
+</body>
+</html>
+
