@@ -272,6 +272,15 @@
             </div>
 
             <div class="mb-10">
+                <h3 class="text-2xl font-medium mb-2">Main Diagonal & Trace: tr(C)</h3>
+                <p class="mb-4 text-gray-600 dark:text-gray-400">The main diagonal of a square matrix consists of the elements from the top-left to the bottom-right. The sum of these elements is called the <strong>Trace</strong>.</p>
+                <div class="flex flex-col items-center justify-center space-y-4">
+                    <div id="diagonal-elements-display" class="flex items-center space-x-4"></div>
+                    <div id="trace-explanation" class="explanation-box p-4 rounded-md text-center text-2xl font-mono w-full max-w-md"></div>
+                </div>
+            </div>
+
+            <div class="mb-10">
                 <h3 class="text-2xl font-medium mb-2">The Identity Matrix: I</h3>
                 <p class="mb-4 text-gray-600 dark:text-gray-400">The identity matrix is the matrix equivalent of the number 1. Any matrix multiplied by the identity matrix is unchanged. It's a square matrix with 1s on the main diagonal and 0s everywhere else.</p>
                  <div class="flex items-center justify-center space-x-4 text-center">
@@ -772,6 +781,15 @@
             const tResult = transpose(matrixC);
             displayResult('transpose-result-display', tResult);
             
+            // Diagonal & Trace
+            const diagElements = [matrixC[0][0], matrixC[1][1]];
+            const traceVal = diagElements[0] + diagElements[1];
+            const diagContainer = document.getElementById('diagonal-elements-display');
+            diagContainer.innerHTML = '';
+            const diagMat = [[diagElements[0], 0], [0, diagElements[1]]];
+            diagContainer.appendChild(createMatrixDisplay(diagMat, true));
+            document.getElementById('trace-explanation').innerHTML = `tr(C) = ${diagElements[0]} + ${diagElements[1]} = <span class="font-bold text-blue-600 dark:text-blue-400">${traceVal.toFixed(2).replace(/\.00$/,'')}</span>`;
+
             // --- UPDATED INVERSE SECTION ---
             const invMessage = document.getElementById('inverse-message');
             const oneOverDetContainer = document.getElementById('one-over-det-display');
